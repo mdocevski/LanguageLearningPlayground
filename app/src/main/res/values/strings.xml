@@ -1,3 +1,5 @@
 <resources>
-    <string name="app_name">LanguageLearningNotes</string>
+    <string name="app_name">Learning Notes</string>
+    <string name="categories_label">Categories</string>
+
 </resources>

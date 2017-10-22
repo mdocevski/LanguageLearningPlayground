@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="categories">
+        <item name="nouns">Nouns</item>
+        <item name="verbs">Verbs</item>
+        <item name="pronouns">Pronouns</item>
+        <item name="adverbs">Adverbs</item>
+        <item name="question_words">Question Words</item>
+        <item name="particles">Particles</item>
+        <item name="common_expressions">Common Expressions</item>
+        <item name="misc_notes">Misc. Notes</item>
+    </string-array>
+</resources>
