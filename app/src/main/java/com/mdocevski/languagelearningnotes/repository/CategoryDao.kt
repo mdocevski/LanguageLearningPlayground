@@ -22,5 +22,5 @@ interface CategoryDao {
     fun deleteCategoryItems(items: List<CategoryItem>)
 
     @Query("SELECT * FROM category_item WHERE category = :category")
-    fun getAllCategoryItems(category: String): LiveData<CategoryItem>
+    fun getAllCategoryItems(category: String): LiveData<List<CategoryItem>>
 }

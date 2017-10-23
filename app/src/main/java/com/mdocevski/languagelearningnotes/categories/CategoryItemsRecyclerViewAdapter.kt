@@ -10,7 +10,7 @@ import com.mdocevski.languagelearningnotes.R
 import com.mdocevski.languagelearningnotes.categories.CategoryFragment.OnListFragmentInteractionListener
 import com.mdocevski.languagelearningnotes.repository.CategoryItem
 
-class CategoryItemsRecyclerViewAdapter(private val values: List<CategoryItem>, private val listener: OnListFragmentInteractionListener) : RecyclerView.Adapter<CategoryItemsRecyclerViewAdapter.ViewHolder>() {
+class CategoryItemsRecyclerViewAdapter(val values: MutableList<CategoryItem>, var listener: OnListFragmentInteractionListener) : RecyclerView.Adapter<CategoryItemsRecyclerViewAdapter.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view = LayoutInflater.from(parent.context)
@@ -32,8 +32,8 @@ class CategoryItemsRecyclerViewAdapter(private val values: List<CategoryItem>, p
     }
 
     inner class ViewHolder(val view: View) : RecyclerView.ViewHolder(view) {
-        private val motherName: TextView = view.findViewById(R.id.mother_name)
-        private val foreignName: TextView = view.findViewById(R.id.foreign_name)
+        private val motherName: TextView = view.findViewById(R.id.motherName)
+        private val foreignName: TextView = view.findViewById(R.id.foreignName)
         private val notes: TextView = view.findViewById(R.id.notes)
         var item: CategoryItem? = null
 

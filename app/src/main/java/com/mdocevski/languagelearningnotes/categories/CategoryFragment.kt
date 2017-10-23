@@ -1,33 +1,28 @@
 package com.mdocevski.languagelearningnotes.categories
 
+import android.arch.lifecycle.Observer
+import android.arch.lifecycle.ViewModelProviders
 import android.content.Context
 import android.os.Bundle
+import android.support.design.widget.FloatingActionButton
 import android.support.v4.app.Fragment
-import android.support.v7.widget.GridLayoutManager
-import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.mdocevski.languagelearningnotes.R
-
+import com.mdocevski.languagelearningnotes.application
 import com.mdocevski.languagelearningnotes.repository.CategoryItem
+import kotlinx.coroutines.experimental.Job
+import kotlinx.coroutines.experimental.android.UI
+import kotlinx.coroutines.experimental.async
+import kotlinx.coroutines.experimental.launch
 
-/**
- * A fragment representing a list of Items.
- *
- *
- * Activities containing this fragment MUST implement the [OnListFragmentInteractionListener]
- * interface.
- */
-/**
- * Mandatory empty constructor for the fragment manager to instantiate the
- * fragment (e.g. upon screen orientation changes).
- */
 class CategoryFragment : Fragment() {
-    private val columnCount: Int = 3
-    private var category: String? = null
+    private lateinit var category: String
     private var mListener: OnListFragmentInteractionListener? = null
+    private lateinit var categoryViewModel: CategoryViewModel
+    private var initJob: Job? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -35,13 +30,29 @@ class CategoryFragment : Fragment() {
         if (arguments != null) {
             category = arguments.getString(ARG_CATEGORY)
         }
-        assert(category!=null)
+        categoryViewModel = ViewModelProviders.of(this).get(CategoryViewModel::class.java)
+        initJob = launch(UI) { categoryViewModel.init(application.database, category) }
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
-        val view = inflater.inflate(R.layout.category_item_list, container, false)
-
+        val view = inflater.inflate(R.layout.category_item_list, container, false) as RecyclerView
+        val adapter = CategoryItemsRecyclerViewAdapter(mutableListOf(), mListener!!)
+        view.adapter = adapter
+        activity.findViewById<FloatingActionButton>(R.id.action_button).setOnClickListener {
+            launch(UI) {
+                categoryViewModel.insertItem(
+                        "schlafen", "to sleep", "Schoenes Schlaf"
+                )
+            }
+        }
+        initJob?.invokeOnCompletion {
+            categoryViewModel.items.observe(this, Observer<List<CategoryItem>> {
+                adapter.values.clear()
+                adapter.values.addAll(it!!)
+                adapter.notifyDataSetChanged()
+            })
+        }
         return view
     }
 
@@ -60,17 +71,7 @@ class CategoryFragment : Fragment() {
         mListener = null
     }
 
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     *
-     *
-     * See the Android Training lesson [Communicating with Other Fragments](http://developer.android.com/training/basics/fragments/communicating.html) for more information.
-     */
     interface OnListFragmentInteractionListener {
-        // TODO: Update argument type and name
         fun onListFragmentInteraction(item: CategoryItem)
     }
 

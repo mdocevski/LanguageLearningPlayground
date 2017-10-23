@@ -32,4 +32,6 @@ ext {
     constraintLayoutVersion = "1.0.2"
     daggerVersion = "2.12"
     ankoVersion = "0.10.2"
+    coroutinesVersion = "0.19.2"
+    stethoVersion = "1.5.0"
 }
